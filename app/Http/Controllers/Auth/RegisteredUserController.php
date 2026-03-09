@@ -14,37 +14,35 @@ use Illuminate\View\View;
 
 class RegisteredUserController extends Controller
 {
-    /**
-     * Display the registration view.
-     */
     public function create(): View
     {
         return view('auth.register');
     }
 
-    /**
-     * Handle an incoming registration request.
-     *
-     * @throws \Illuminate\Validation\ValidationException
-     */
     public function store(Request $request): RedirectResponse
     {
+        // Validation des champs
         $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'nom'      => ['required', 'string', 'max:100'],
+            'email'    => ['required', 'email', 'max:150', 'unique:users'],
+            'phone'    => ['nullable', 'string', 'max:20'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
+        // Création du citoyen
         $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
+            'nom'      => $request->nom,
+            'email'    => $request->email,
+            'phone'    => $request->phone,
             'password' => Hash::make($request->password),
+            'role'     => 'citoyen',
+            'status'   => 'actif',
         ]);
 
         event(new Registered($user));
 
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        return redirect()->route('citizen.dashboard');
     }
 }

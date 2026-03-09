@@ -1,20 +1,40 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\WelcomeController;
+use App\Http\Controllers\Citizen\DashboardController as CitizenDashboard;
+use App\Http\Controllers\Admin\DashboardController as AdminDashboard;
 
+// ── Page d'accueil publique
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('home');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// ── Redirection après login selon le rôle
+Route::middleware('auth')->get('/redirect', function () {
+    $user = auth()->user();
+    if ($user->isAdmin()) {
+        return redirect()->route('admin.dashboard');
+    }
+    return redirect()->route('citizen.dashboard');
+})->name('redirect');
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
+// ── Routes Citoyen
+Route::middleware(['auth', 'role:citoyen'])
+    ->prefix('citizen')
+    ->name('citizen.')
+    ->group(function () {
+        Route::get('/dashboard', [CitizenDashboard::class, 'index'])
+            ->name('dashboard');
+    });
+
+// ── Routes Admin 
+Route::middleware(['auth', 'role:admin,super_admin'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+        Route::get('/dashboard', [AdminDashboard::class, 'index'])
+            ->name('dashboard');
+    });
 
 require __DIR__.'/auth.php';
