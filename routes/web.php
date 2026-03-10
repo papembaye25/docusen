@@ -6,9 +6,7 @@ use App\Http\Controllers\Citizen\DashboardController as CitizenDashboard;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboard;
 
 // ── Page d'accueil publique
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');
+Route::get('/', [WelcomeController::class, 'index'])->name('home');
 
 // ── Redirection après login selon le rôle
 Route::middleware('auth')->get('/redirect', function () {
