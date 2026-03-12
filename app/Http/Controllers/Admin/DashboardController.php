@@ -1,9 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Citizen;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\DocumentRequest;
+use App\Models\User;
+use App\Models\DocumentType;
 
 class DashboardController extends Controller
 {
@@ -11,26 +13,34 @@ class DashboardController extends Controller
     {
         $user = auth()->user();
 
-        // Statistiques personnelles
+        // Statistiques globales
         $stats = [
-            'total'         => DocumentRequest::where('user_id', $user->id)->count(),
-            'en_attente'    => DocumentRequest::where('user_id', $user->id)
-                                ->where('statut', 'en_attente')->count(),
-            'en_traitement' => DocumentRequest::where('user_id', $user->id)
-                                ->where('statut', 'en_traitement')->count(),
-            'approuve'      => DocumentRequest::where('user_id', $user->id)
-                                ->where('statut', 'approuve')->count(),
-            'rejete'        => DocumentRequest::where('user_id', $user->id)
-                                ->where('statut', 'rejete')->count(),
+            'total_demandes'    => DocumentRequest::count(),
+            'en_attente'        => DocumentRequest::where('statut', 'en_attente')->count(),
+            'en_traitement'     => DocumentRequest::where('statut', 'en_traitement')->count(),
+            'approuve'          => DocumentRequest::where('statut', 'approuve')->count(),
+            'rejete'            => DocumentRequest::where('statut', 'rejete')->count(),
+            'total_citoyens'    => User::where('role', 'citoyen')->count(),
+            'total_doc_types'   => DocumentType::count(),
         ];
 
-        // 5 dernières demandes
-        $dernieresDemandes = DocumentRequest::where('user_id', $user->id)
-            ->with('documentType')
+        // 10 dernières demandes
+        $dernieresDemandes = DocumentRequest::with(['user', 'documentType'])
             ->latest()
-            ->take(5)
+            ->take(10)
             ->get();
 
-        return view('citizen.dashboard', compact('user', 'stats', 'dernieresDemandes'));
+        // Demandes par mois (6 derniers mois)
+        $demandesParMois = DocumentRequest::selectRaw(
+            'MONTH(created_at) as mois, COUNT(*) as total'
+        )
+        ->whereYear('created_at', date('Y'))
+        ->groupBy('mois')
+        ->orderBy('mois')
+        ->get();
+
+        return view('admin.dashboard', compact(
+            'user', 'stats', 'dernieresDemandes', 'demandesParMois'
+        ));
     }
 }

@@ -5,6 +5,8 @@ use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\Citizen\DashboardController as CitizenDashboard;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboard;
 use App\Http\Controllers\Citizen\RequestController as CitizenRequest;
+use App\Http\Controllers\Admin\RequestAdminController as AdminRequest;
+use App\Http\Controllers\Admin\DocumentTypeController as AdminDocumentType;
 
 // ── Page d'accueil publique
 Route::get('/', [WelcomeController::class, 'index'])->name('home');
@@ -44,6 +46,32 @@ Route::middleware(['auth', 'role:admin,super_admin'])
     ->group(function () {
         Route::get('/dashboard', [AdminDashboard::class, 'index'])
             ->name('dashboard');
+
+        // Demandes
+        Route::get('/requests', [AdminRequest::class, 'index'])
+            ->name('requests.index');
+        Route::get('/requests/{id}', [AdminRequest::class, 'show'])
+            ->name('requests.show');
+        Route::post('/requests/{id}/approuver', [AdminRequest::class, 'approuver'])
+            ->name('requests.approuver');
+        Route::post('/requests/{id}/rejeter', [AdminRequest::class, 'rejeter'])
+            ->name('requests.rejeter');
+        Route::post('/requests/{id}/en-traitement', [AdminRequest::class, 'enTraitement'])
+            ->name('requests.enTraitement');
+
+        // Types de documents
+        Route::get('/document-types', [AdminDocumentType::class, 'index'])
+            ->name('document-types.index');
+        Route::get('/document-types/create', [AdminDocumentType::class, 'create'])
+            ->name('document-types.create');
+        Route::post('/document-types', [AdminDocumentType::class, 'store'])
+            ->name('document-types.store');
+        Route::get('/document-types/{id}/edit', [AdminDocumentType::class, 'edit'])
+            ->name('document-types.edit');
+        Route::put('/document-types/{id}', [AdminDocumentType::class, 'update'])
+            ->name('document-types.update');
+        Route::delete('/document-types/{id}', [AdminDocumentType::class, 'destroy'])
+            ->name('document-types.destroy');
     });
 
 require __DIR__.'/auth.php';
