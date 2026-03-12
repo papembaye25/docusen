@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\Citizen\DashboardController as CitizenDashboard;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboard;
+use App\Http\Controllers\Citizen\RequestController as CitizenRequest;
 
 // ── Page d'accueil publique
 Route::get('/', [WelcomeController::class, 'index'])->name('home');
@@ -18,12 +19,22 @@ Route::middleware('auth')->get('/redirect', function () {
 })->name('redirect');
 
 // ── Routes Citoyen
-Route::middleware(['auth', 'role:citoyen'])
+    Route::middleware(['auth', 'role:citoyen'])
     ->prefix('citizen')
     ->name('citizen.')
     ->group(function () {
         Route::get('/dashboard', [CitizenDashboard::class, 'index'])
             ->name('dashboard');
+
+        // Demandes
+        Route::get('/requests', [CitizenRequest::class, 'index'])
+            ->name('requests.index');
+        Route::get('/requests/create', [CitizenRequest::class, 'create'])
+            ->name('requests.create');
+        Route::post('/requests', [CitizenRequest::class, 'store'])
+            ->name('requests.store');
+        Route::get('/requests/{id}', [CitizenRequest::class, 'show'])
+            ->name('requests.show');
     });
 
 // ── Routes Admin 
