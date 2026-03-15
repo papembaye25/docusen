@@ -20,6 +20,14 @@
                 class="text-blue-200 hover:text-white text-sm transition">
                 Demandes
             </a>
+
+            {{-- lien Utilisateurs visibles uniquement pour le super admins --}}
+            @if(auth()->user()->isSuperAdmin())
+                <a href="{{ route('admin.users.index') }}"
+                    class="text-blue-200 hover:text-white text-sm transition">
+                    Gestion des Utilisateurs
+                </a>
+            @endif
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
                 <button type="submit"
@@ -53,7 +61,8 @@
 
         {{-- Table --}}
         <div class="bg-white rounded-2xl shadow overflow-hidden">
-            <table class="w-full text-sm">
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
                 <thead class="bg-blue-900 text-white">
                     <tr>
                         <th class="px-4 py-3 text-left font-semibold">Nom</th>
@@ -111,6 +120,7 @@
                     @endforelse
                 </tbody>
             </table>
+            </div>
 
             {{-- Pagination --}}
             @if($types->hasPages())

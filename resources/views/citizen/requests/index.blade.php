@@ -50,7 +50,8 @@
         {{-- Table des demandes --}}
         @if($demandes->count() > 0)
             <div class="bg-white rounded-2xl shadow overflow-hidden">
-                <table class="w-full text-sm">
+                <div class="overflow-x-auto">
+                     <table class="w-full text-sm">
                     <thead class="bg-blue-900 text-white">
                         <tr>
                             <th class="px-4 py-3 text-left font-semibold">Référence</th>
@@ -87,6 +88,8 @@
                         @endforeach
                     </tbody>
                 </table>
+                </div>
+               
             </div>
 
             {{-- Pagination --}}

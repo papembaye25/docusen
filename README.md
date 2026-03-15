@@ -1,59 +1,108 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🇸🇳 DocuSen — Plateforme de gestion des documents administratifs
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+[![Laravel](https://img.shields.io/badge/Laravel-11-red?style=flat-square&logo=laravel)](https://laravel.com)
+[![PHP](https://img.shields.io/badge/PHP-8.3-blue?style=flat-square&logo=php)](https://php.net)
+[![TailwindCSS](https://img.shields.io/badge/TailwindCSS-3-38bdf8?style=flat-square&logo=tailwindcss)](https://tailwindcss.com)
+[![MySQL](https://img.shields.io/badge/MySQL-8-orange?style=flat-square&logo=mysql)](https://mysql.com)
 
-## About Laravel
+> Plateforme web permettant aux citoyens sénégalais de soumettre et suivre leurs demandes de documents administratifs en ligne.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## ✨ Fonctionnalités
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### 👤 Espace Citoyen
+- Inscription / Connexion / Réinitialisation mot de passe
+- Soumettre une demande de document avec pièces justificatives
+- Suivre le statut en temps réel (en attente, en traitement, approuvé, rejeté)
+- Recevoir des notifications email à chaque changement de statut
+- Historique complet des demandes
 
-## Learning Laravel
+### 🛡️ Espace Admin
+- Dashboard avec statistiques et graphiques Chart.js
+- Traiter les demandes (approuver / rejeter / mettre en traitement)
+- Gérer les types de documents
+- Filtrer et rechercher les demandes
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+---
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 🛠️ Stack technique
 
-## Laravel Sponsors
+| Technologie | Usage |
+|-------------|-------|
+| Laravel 11 | Framework PHP backend |
+| PHP 8.3 | Langage backend |
+| Tailwind CSS | Framework CSS |
+| MySQL | Base de données |
+| Chart.js | Graphiques dashboard |
+| Alpine.js | Interactions UI |
+| Twilio | Notifications SMS |
+| SMTP Gmail | Notifications Email |
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+---
 
-### Premium Partners
+## 🚀 Installation
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### Prérequis
+- PHP 8.3+
+- Composer
+- Node.js & NPM
+- MySQL
 
-## Contributing
+### Étapes
+```bash
+# 1. Cloner le projet
+git clone https://github.com/papembaye25/docusen.git
+cd docusen
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+# 2. Installer les dépendances PHP
+composer install
 
-## Code of Conduct
+# 3. Installer les dépendances JS
+npm install && npm run build
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+# 4. Configurer l'environnement
+cp .env.example .env
+php artisan key:generate
 
-## Security Vulnerabilities
+# 5. Configurer la base de données dans .env
+DB_DATABASE=docusen
+DB_USERNAME=root
+DB_PASSWORD=
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+# 6. Lancer les migrations et seeders
+php artisan migrate --seed
 
-## License
+# 7. Lier le storage
+php artisan storage:link
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+---
+
+## 👥 Comptes de démonstration
+
+| Rôle | Email | Mot de passe |
+|------|-------|--------------|
+| Super Admin | superadmin@docusen.sn | SuperAdmin@2026 |
+| Admin | admin@docusen.sn | Admin@2026 |
+| Citoyen | citoyen@test.sn | Citoyen@2026 |
+
+---
+
+## 📸 Captures d'écran
+
+> Screenshots à venir
+
+---
+
+## 👨‍💻 Auteur
+
+**Pape Mbaye** — Développeur Web Full Stack
+- GitHub : [@papembaye25](https://github.com/papembaye25)
+- LinkedIn : [Pape Mbaye](https://linkedin.com/in/papembaye)
+
+---
+
+## 📄 Licence
+
+Ce projet est sous licence MIT.

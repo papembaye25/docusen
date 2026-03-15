@@ -16,6 +16,15 @@
                 class="text-blue-200 hover:text-white text-sm transition">
                 ← Retour
             </a>
+
+            {{-- lien Utilisateurs visibles uniquement pour le super admins --}}
+            @if(auth()->user()->isSuperAdmin())
+                <a href="{{ route('admin.users.index') }}"
+                    class="text-blue-200 hover:text-white text-sm transition">
+                    Gestion des Utilisateurs
+                </a>
+            @endif
+            
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
                 <button type="submit"

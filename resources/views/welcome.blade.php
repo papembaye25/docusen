@@ -14,12 +14,14 @@
             Docu<span class="text-orange-500">Sen</span>
         </h1>
         <div class="flex items-center gap-4">
+            {{-- ici on gere la l'authentifiaction de l'administrateur  avec @auth--}}
             @auth
                 @if(auth()->user()->isAdmin())
                     <a href="{{ route('admin.dashboard') }}"
                         class="bg-orange-500 px-4 py-2 rounded-xl text-sm font-semibold hover:bg-orange-600 transition">
                         Dashboard Admin
                     </a>
+                    {{-- sinon ici on gere l'espace citoyen --}}
                 @else
                     <a href="{{ route('citizen.dashboard') }}"
                         class="bg-orange-500 px-4 py-2 rounded-xl text-sm font-semibold hover:bg-orange-600 transition">
@@ -102,14 +104,14 @@
                     <div class="w-12 h-12 bg-blue-100 rounded-2xl flex items-center justify-center text-2xl mb-4">
                         @php
                             $icones = [
-                                'Acte de naissance'          => '👶',
+                                'Acte de naissance'            => '👶',
                                 'Extrait de casier judiciaire' => '⚖️',
-                                'Certificat de résidence'    => '🏠',
-                                'Certificat de nationalité'  => '🇸🇳',
-                                'Renouvellement CNI'         => '🪪',
-                                'Attestation de célibat'     => '💍',
-                                'Demande de passeport'       => '✈️',
-                                'Acte de mariage'            => '💒',
+                                'Certificat de résidence'      => '🏠',
+                                'Certificat de nationalité'    => '🇸🇳',
+                                'Renouvellement CNI'           => '🪪',
+                                'Attestation de célibat'       => '💍',
+                                'Demande de passeport'         => '✈️',
+                                'Acte de mariage'              => '💒',
                             ];
                             echo $icones[$type->nom] ?? '📄';
                         @endphp
