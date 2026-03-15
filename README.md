@@ -99,7 +99,7 @@ php artisan storage:link
 
 **Pape Mbaye** — Développeur Web Full Stack
 - GitHub : [@papembaye25](https://github.com/papembaye25)
-- LinkedIn : [Pape Mbaye](https://linkedin.com/in/papembaye)
+- LinkedIn : [Pape Mbaye Gaye](https://linkedin.com/in/papembaye)
 
 ---
 
