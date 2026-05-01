@@ -9,34 +9,57 @@
 <body class="bg-gray-50">
 
     {{-- Navbar --}}
-    <nav class="bg-blue-900 text-white px-6 py-4 flex justify-between items-center shadow-lg">
-        <h1 class="text-2xl font-bold">Docu<span class="text-orange-500">Sen</span> <span class="text-sm font-normal text-blue-300">Admin</span></h1>
-        <div class="flex items-center gap-4">
-            <a href="{{ route('admin.dashboard') }}"
-                class="text-blue-200 hover:text-white text-sm transition">
-                Dashboard
-            </a>
-            <a href="{{ route('admin.requests.index') }}"
-                class="text-blue-200 hover:text-white text-sm transition">
-                Demandes
-            </a>
+<nav class="bg-blue-900 text-white shadow-lg sticky top-0 z-50" x-data="{ open: false }">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+        <a href="{{ route('home') }}" class="text-xl font-bold">
+            Docu<span class="text-orange-500">Sen</span>
+            <span class="text-xs font-normal text-blue-300 ml-1">Admin</span>
+        </a>
 
-            {{-- lien Utilisateurs visibles uniquement pour le super admins --}}
+        {{-- Desktop --}}
+        <div class="hidden md:flex items-center gap-4">
+            <a href="{{ route('admin.dashboard') }}" class="text-blue-200 hover:text-white text-sm transition">Dashboard</a>
+            <a href="{{ route('admin.requests.index') }}" class="text-blue-200 hover:text-white text-sm transition">Demandes</a>
+            <a href="{{ route('admin.document-types.index') }}" class="text-blue-200 hover:text-white text-sm transition">Documents</a>
             @if(auth()->user()->isSuperAdmin())
-                <a href="{{ route('admin.users.index') }}"
-                    class="text-blue-200 hover:text-white text-sm transition">
-                    Gestion des Utilisateurs
-                </a>
+                <a href="{{ route('admin.users.index') }}" class="text-blue-200 hover:text-white text-sm transition">Utilisateurs</a>
             @endif
+            <span class="text-blue-300 text-sm">{{ auth()->user()->nom }}</span>
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
-                <button type="submit"
-                    class="bg-orange-500 px-4 py-2 rounded-xl text-sm font-semibold hover:bg-orange-600 transition">
+                <button type="submit" class="bg-orange-500 px-4 py-2 rounded-xl text-sm font-semibold hover:bg-orange-600 transition">
                     Déconnexion
                 </button>
             </form>
         </div>
-    </nav>
+
+        {{-- Hamburger --}}
+        <button @click="open = !open" class="md:hidden focus:outline-none">
+            <svg x-show="!open" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+            </svg>
+            <svg x-show="open" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+        </button>
+    </div>
+
+    {{-- Menu mobile --}}
+    <div x-show="open" x-transition class="md:hidden bg-blue-800 px-4 py-4 flex flex-col gap-3">
+        <a href="{{ route('admin.dashboard') }}" class="text-blue-200 text-sm">Dashboard</a>
+        <a href="{{ route('admin.requests.index') }}" class="text-blue-200 text-sm">Demandes</a>
+        <a href="{{ route('admin.document-types.index') }}" class="text-blue-200 text-sm">Documents</a>
+        @if(auth()->user()->isSuperAdmin())
+            <a href="{{ route('admin.users.index') }}" class="text-blue-200 text-sm">Utilisateurs</a>
+        @endif
+        <form method="POST" action="{{ route('logout') }}">
+            @csrf
+            <button type="submit" class="bg-orange-500 px-4 py-2 rounded-xl text-sm font-semibold w-full text-center">
+                Déconnexion
+            </button>
+        </form>
+    </div>
+</nav>
 
     <div class="max-w-5xl mx-auto px-4 py-10">
 
