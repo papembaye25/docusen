@@ -9,31 +9,66 @@
 <body class="bg-gray-50">
 
     {{-- Navbar --}}
-    <nav class="bg-blue-900 text-white px-6 py-4 flex justify-between items-center shadow-lg">
-        <h1 class="text-2xl font-bold">Docu<span class="text-orange-500">Sen</span></h1>
-        <div class="flex items-center gap-4">
-            <a href="{{ route('citizen.requests.index') }}"
-                class="text-blue-200 hover:text-white text-sm transition">
-                Mes demandes
+    <nav class="bg-blue-900 text-white shadow-lg sticky top-0 z-50" x-data="{ open: false }">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="{{ route('home') }}" class="text-xl font-bold">
+                Docu<span class="text-orange-500">Sen</span>
             </a>
+
+            {{-- Desktop --}}
+            <div class="hidden md:flex items-center gap-4">
+                <a href="{{ route('citizen.dashboard') }}"
+                    class="text-blue-200 hover:text-white text-sm transition">
+                    Dashboard
+                </a>
+                <a href="{{ route('citizen.requests.index') }}"
+                    class="text-blue-200 hover:text-white text-sm transition">
+                    Mes demandes
+                </a>
+                <a href="{{ route('citizen.requests.create') }}"
+                    class="bg-orange-500 px-4 py-2 rounded-xl text-sm font-semibold hover:bg-orange-600 transition">
+                    + Nouvelle demande
+                </a>
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="text-blue-200 hover:text-white text-sm transition">
+                        Déconnexion
+                    </button>
+                </form>
+            </div>
+
+            {{-- Hamburger --}}
+            <button @click="open = !open" class="md:hidden focus:outline-none">
+                <svg x-show="!open" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                </svg>
+                <svg x-show="open" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+        </div>
+
+        {{-- Menu mobile --}}
+        <div x-show="open" x-transition class="md:hidden bg-blue-800 px-4 py-4 flex flex-col gap-3">
+            <a href="{{ route('citizen.dashboard') }}" class="text-blue-200 text-sm">Dashboard</a>
+            <a href="{{ route('citizen.requests.index') }}" class="text-blue-200 text-sm">Mes demandes</a>
             <a href="{{ route('citizen.requests.create') }}"
-                class="bg-orange-500 px-4 py-2 rounded-xl text-sm font-semibold hover:bg-orange-600 transition">
+                class="bg-orange-500 px-4 py-2 rounded-xl text-sm font-semibold text-center">
                 + Nouvelle demande
             </a>
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
-                <button type="submit"
-                    class="text-blue-200 hover:text-red-500 text-sm transition">
+                <button type="submit" class="text-blue-200 text-sm w-full text-left">
                     Déconnexion
                 </button>
             </form>
         </div>
     </nav>
 
-    <div class="max-w-5xl mx-auto px-4 py-10">
+    <div class="max-w-5xl mx-auto px-4 py-8">
 
         {{-- Message de bienvenue --}}
-        <div class="mb-8">
+        <div class="mb-6">
             <h2 class="text-2xl font-bold text-blue-900">
                 Bonjour, {{ $user->nom }} 👋
             </h2>
@@ -50,59 +85,41 @@
         @endif
 
         {{-- Cartes statistiques --}}
-<div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-10">
-    {{-- Total --}}
-    <div class="bg-white rounded-2xl shadow p-5 flex items-center gap-4">
-        <div class="w-12 h-12 bg-blue-100 rounded-2xl flex items-center justify-center text-xl">
-            📋
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-8">
+            <div class="bg-white rounded-2xl shadow p-4 flex flex-col items-center text-center">
+                <div class="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center text-lg mb-2">📋</div>
+                <p class="text-2xl font-bold text-blue-900">{{ $stats['total'] }}</p>
+                <p class="text-gray-400 text-xs mt-0.5">Total</p>
+            </div>
+            <div class="bg-white rounded-2xl shadow p-4 flex flex-col items-center text-center">
+                <div class="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center text-lg mb-2">⏳</div>
+                <p class="text-2xl font-bold text-orange-500">{{ $stats['en_attente'] }}</p>
+                <p class="text-gray-400 text-xs mt-0.5">En attente</p>
+            </div>
+            <div class="bg-white rounded-2xl shadow p-4 flex flex-col items-center text-center">
+                <div class="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center text-lg mb-2">🔄</div>
+                <p class="text-2xl font-bold text-blue-500">{{ $stats['en_traitement'] }}</p>
+                <p class="text-gray-400 text-xs mt-0.5">En traitement</p>
+            </div>
+            <div class="bg-white rounded-2xl shadow p-4 flex flex-col items-center text-center">
+                <div class="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center text-lg mb-2">✅</div>
+                <p class="text-2xl font-bold text-green-600">{{ $stats['approuve'] }}</p>
+                <p class="text-gray-400 text-xs mt-0.5">Approuvées</p>
+            </div>
+            <div class="bg-white rounded-2xl shadow p-4 flex flex-col items-center text-center col-span-2 md:col-span-1">
+                <div class="w-10 h-10 bg-red-100 rounded-xl flex items-center justify-center text-lg mb-2">❌</div>
+                <p class="text-2xl font-bold text-red-500">{{ $stats['rejete'] }}</p>
+                <p class="text-gray-400 text-xs mt-0.5">Rejetées</p>
+            </div>
         </div>
-        <div>
-            <p class="text-2xl font-bold text-blue-900">{{ $stats['total'] }}</p>
-            <p class="text-gray-400 text-xs mt-0.5">Total</p>
-        </div>
-    </div>
-    {{-- En attente --}}
-    <div class="bg-white rounded-2xl shadow p-5 flex items-center gap-4">
-        <div class="w-12 h-12 bg-orange-100 rounded-2xl flex items-center justify-center text-xl">
-            ⏳
-        </div>
-        <div>
-            <p class="text-2xl font-bold text-orange-500">{{ $stats['en_attente'] }}</p>
-            <p class="text-gray-400 text-xs mt-0.5">En attente</p>
-        </div>
-    </div>
-    {{-- En traitement --}}
-    <div class="bg-white rounded-2xl shadow p-5 flex items-center gap-4">
-        <div class="w-12 h-12 bg-blue-100 rounded-2xl flex items-center justify-center text-xl">
-            🔄
-        </div>
-        <div>
-            <p class="text-2xl font-bold text-blue-500">{{ $stats['en_traitement'] }}</p>
-            <p class="text-gray-400 text-xs mt-0.5">En traitement</p>
-        </div>
-    </div>
-    {{-- Approuvées --}}
-    <div class="bg-white rounded-2xl shadow p-5 flex items-center gap-4">
-        <div class="w-12 h-12 bg-green-100 rounded-2xl flex items-center justify-center text-xl">
-            ✅
-        </div>
-        <div>
-            <p class="text-2xl font-bold text-green-600">{{ $stats['approuve'] }}</p>
-            <p class="text-gray-400 text-xs mt-0.5">Approuvées</p>
-        </div>
-    </div>
-    {{-- Rejetées --}}
-    <div class="bg-white rounded-2xl shadow p-5 flex items-center gap-4">
-        <div class="w-12 h-12 bg-red-100 rounded-2xl flex items-center justify-center text-xl">
-            ❌
-        </div>
-        <div>
-            <p class="text-2xl font-bold text-red-500">{{ $stats['rejete'] }}</p>
-            <p class="text-gray-400 text-xs mt-0.5">Rejetées</p>
-        </div>
-    </div>
 
-</div>
+        {{-- Bouton nouvelle demande mobile --}}
+        <div class="md:hidden mb-6">
+            <a href="{{ route('citizen.requests.create') }}"
+                class="block bg-orange-500 text-white py-3 rounded-xl font-semibold text-center hover:bg-orange-600 transition">
+                + Nouvelle demande
+            </a>
+        </div>
 
         {{-- Dernières demandes --}}
         <div class="bg-white rounded-2xl shadow p-6">
@@ -117,9 +134,9 @@
             @if($dernieresDemandes->count() > 0)
                 <div class="flex flex-col gap-3">
                     @foreach($dernieresDemandes as $demande)
-                        <div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-blue-50 transition">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-blue-50 transition gap-3">
                             <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center text-lg">
+                                <div class="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center text-lg flex-shrink-0">
                                     📄
                                 </div>
                                 <div>
@@ -132,7 +149,7 @@
                                     </p>
                                 </div>
                             </div>
-                            <div class="flex items-center gap-3">
+                            <div class="flex items-center gap-3 ml-13">
                                 <span class="px-3 py-1 rounded-full text-xs font-semibold {{ $demande->statutBadge() }}">
                                     {{ $demande->statutLabel() }}
                                 </span>

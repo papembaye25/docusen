@@ -25,10 +25,7 @@ class DashboardController extends Controller
         ];
 
         // 10 dernières demandes
-        $dernieresDemandes = DocumentRequest::with(['user', 'documentType'])
-            ->latest()
-            ->take(10)
-            ->get();
+        $dernieresDemandes = DocumentRequest::with(['user', 'documentType'])->latest() ->take(10) ->get();
 
         // Demandes par mois (6 derniers mois)
         $demandesParMois = DocumentRequest::selectRaw(

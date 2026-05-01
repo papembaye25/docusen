@@ -8,86 +8,181 @@
 </head>
 <body class="bg-gray-50">
 
-    {{-- ── NAVBAR --}}
-    <nav class="bg-blue-900 text-white px-6 py-4 flex justify-between items-center shadow-lg">
-        <h1 class="text-2xl font-bold font-heading">
+    {{--NAVBAR --}}
+<nav class="bg-white shadow-sm sticky top-0 z-50" x-data="{ open: false }">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+
+        {{-- Logo --}}
+        <a href="{{ route('home') }}" class="text-2xl font-bold">
             Docu<span class="text-orange-500">Sen</span>
-        </h1>
-        <div class="flex items-center gap-4">
-            {{-- ici on gere la l'authentifiaction de l'administrateur  avec @auth--}}
+        </a>
+
+        {{-- Menu desktop --}}
+        <div class="hidden md:flex items-center gap-6">
+            <a href="{{ route('home') }}#documents" class="text-gray-600 hover:text-blue-900 text-sm font-medium transition">
+                Documents
+            </a>
+            <a href="{{ route('home') }}#comment" class="text-gray-600 hover:text-blue-900 text-sm font-medium transition">
+                Comment ça marche 
+            </a>
+
             @auth
+            {{-- ici on gere l'affichage du menu selon le role de l'utilisateur --}}
                 @if(auth()->user()->isAdmin())
                     <a href="{{ route('admin.dashboard') }}"
-                        class="bg-orange-500 px-4 py-2 rounded-xl text-sm font-semibold hover:bg-orange-600 transition">
+                        class="bg-blue-900 text-white px-4 py-2 rounded-xl text-sm font-semibold hover:bg-blue-800 transition">
                         Dashboard Admin
                     </a>
-                    {{-- sinon ici on gere l'espace citoyen --}}
                 @else
                     <a href="{{ route('citizen.dashboard') }}"
-                        class="bg-orange-500 px-4 py-2 rounded-xl text-sm font-semibold hover:bg-orange-600 transition">
+                        class="bg-blue-900 text-white px-4 py-2 rounded-xl text-sm font-semibold hover:bg-blue-800 transition">
                         Mon Espace
                     </a>
                 @endif
             @else
                 <a href="{{ route('login') }}"
-                    class="text-white hover:text-orange-400 text-sm font-medium transition">
+                    class="text-blue-900 font-semibold text-sm hover:text-orange-500 transition">
                     Se connecter
                 </a>
                 <a href="{{ route('register') }}"
-                    class="bg-orange-500 px-4 py-2 rounded-xl text-sm font-semibold hover:bg-orange-600 transition">
+                    class="bg-orange-500 text-white px-4 py-2 rounded-xl text-sm font-semibold hover:bg-orange-600 transition">
                     S'inscrire
                 </a>
             @endauth
         </div>
-    </nav>
+
+        {{-- Menu hamburger mobile --}}
+        <button @click="open = !open" class="md:hidden text-blue-900 focus:outline-none">
+            <svg x-show="!open" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+            </svg>
+            <svg x-show="open" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+        </button>
+
+    </div>
+
+    {{-- Menu mobile --}}
+    <div x-show="open" x-transition class="md:hidden bg-white border-t border-gray-100 px-4 py-4 flex flex-col gap-4">
+        <a href="{{ route('home') }}#documents" class="text-gray-600 text-sm font-medium">Documents</a>
+        <a href="{{ route('home') }}#comment" class="text-gray-600 text-sm font-medium">Comment ça marche</a>
+        @auth
+            @if(auth()->user()->isAdmin())
+                <a href="{{ route('admin.dashboard') }}"
+                    class="bg-blue-900 text-white px-4 py-2 rounded-xl text-sm font-semibold text-center">
+                    Dashboard Admin
+                </a>
+            @else
+                <a href="{{ route('citizen.dashboard') }}"
+                    class="bg-blue-900 text-white px-4 py-2 rounded-xl text-sm font-semibold text-center">
+                    Mon Espace
+                </a>
+            @endif
+        @else
+            <a href="{{ route('login') }}" class="text-blue-900 font-semibold text-sm text-center">
+                Se connecter
+            </a>
+            <a href="{{ route('register') }}"
+                class="bg-orange-500 text-white px-4 py-2 rounded-xl text-sm font-semibold text-center">
+                S'inscrire
+            </a>
+        @endauth
+    </div>
+</nav>
 
     {{-- ── HERO SECTION --}}
-    <section class="bg-gradient-to-br from-blue-900 via-blue-800 to-blue-900 text-white py-24 px-6">
-        <div class="max-w-4xl mx-auto text-center">
+<section class="bg-gradient-to-br from-blue-900 via-blue-800 to-blue-900 text-white py-20 md:py-32 px-6">
+    <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+
+        {{-- Texte --}}
+        <div>
             <span class="bg-orange-500 text-white text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-wider">
-                République du Sénégal
+                🇸🇳 République du Sénégal
             </span>
-            <h2 class="text-4xl md:text-5xl font-bold font-heading mt-6 mb-4 leading-tight">
+            <h1 class="text-4xl md:text-5xl font-bold mt-6 mb-4 leading-tight">
                 Vos documents administratifs
                 <span class="text-orange-400">en ligne</span>
-            </h2>
-            <p class="text-blue-200 text-lg mb-10 max-w-2xl mx-auto">
+            </h1>
+            <p class="text-blue-200 text-lg mb-8 leading-relaxed">
                 DocuSen simplifie vos démarches administratives. Soumettez, suivez
                 et recevez vos documents officiels sans vous déplacer.
             </p>
-            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <div class="flex flex-col sm:flex-row gap-4">
                 <a href="{{ route('register') }}"
-                    class="bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 rounded-2xl font-bold text-lg transition shadow-lg">
-                    Faire une demande
+                    class="bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 rounded-2xl font-bold text-lg transition shadow-lg text-center">
+                    🚀 Faire une demande
                 </a>
                 <a href="{{ route('login') }}"
-                    class="bg-white/10 hover:bg-white/20 text-white px-8 py-4 rounded-2xl font-bold text-lg transition border border-white/30">
+                    class="bg-white/10 hover:bg-white/20 text-white px-8 py-4 rounded-2xl font-bold text-lg transition border border-white/30 text-center">
                     Se connecter
                 </a>
             </div>
         </div>
-    </section>
 
-    {{-- ── STATS --}}
-    <section class="bg-white py-12 px-6 shadow-sm">
-        <div class="max-w-4xl mx-auto grid grid-cols-3 gap-8 text-center">
-            <div>
-                <p class="text-3xl font-bold text-blue-900">8+</p>
-                <p class="text-gray-500 text-sm mt-1">Types de documents</p>
-            </div>
-            <div>
-                <p class="text-3xl font-bold text-blue-900">100%</p>
-                <p class="text-gray-500 text-sm mt-1">En ligne</p>
-            </div>
-            <div>
-                <p class="text-3xl font-bold text-blue-900">24/7</p>
-                <p class="text-gray-500 text-sm mt-1">Disponible</p>
+        {{-- Illustration --}}
+        <div class="hidden md:flex justify-center">
+            <div class="bg-white/10 rounded-3xl p-8 backdrop-blur-sm border border-white/20 w-full max-w-sm">
+                <div class="flex flex-col gap-4">
+                    <div class="bg-white/10 rounded-2xl p-4 flex items-center gap-4">
+                        <div class="w-12 h-12 bg-orange-500 rounded-xl flex items-center justify-center text-2xl">📄</div>
+                        <div>
+                            <p class="font-bold text-sm">Acte de naissance</p>
+                            <p class="text-blue-200 text-xs">Délai : 3 jours ouvrables</p>
+                        </div>
+                        <span class="ml-auto bg-green-500 text-white text-xs px-2 py-1 rounded-full">✓</span>
+                    </div>
+                    <div class="bg-white/10 rounded-2xl p-4 flex items-center gap-4">
+                        <div class="w-12 h-12 bg-orange-500 rounded-xl flex items-center justify-center text-2xl">🪪</div>
+                        <div>
+                            <p class="font-bold text-sm">Renouvellement CNI</p>
+                            <p class="text-blue-200 text-xs">Délai : 14 jours ouvrables</p>
+                        </div>
+                        <span class="ml-auto bg-orange-400 text-white text-xs px-2 py-1 rounded-full">⏳</span>
+                    </div>
+                    <div class="bg-white/10 rounded-2xl p-4 flex items-center gap-4">
+                        <div class="w-12 h-12 bg-orange-500 rounded-xl flex items-center justify-center text-2xl">✈️</div>
+                        <div>
+                            <p class="font-bold text-sm">Demande de passeport</p>
+                            <p class="text-blue-200 text-xs">Délai : 21 jours ouvrables</p>
+                        </div>
+                        <span class="ml-auto bg-blue-400 text-white text-xs px-2 py-1 rounded-full">🔄</span>
+                    </div>
+                    <div class="bg-orange-500 rounded-2xl p-4 text-center">
+                        <p class="font-bold text-sm">✅ Demande soumise avec succès !</p>
+                        <p class="text-orange-100 text-xs mt-1">Référence : DOC-2026-0042</p>
+                    </div>
+                </div>
             </div>
         </div>
-    </section>
+
+    </div>
+</section>
+
+    {{-- ── STATS --}}
+<section class="bg-white py-12 px-6 shadow-sm">
+    <div class="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+        <div class="p-4">
+            <p class="text-4xl font-bold text-blue-900">8+</p>
+            <p class="text-gray-500 text-sm mt-1">Types de documents</p>
+        </div>
+        <div class="p-4">
+            <p class="text-4xl font-bold text-orange-500">100%</p>
+            <p class="text-gray-500 text-sm mt-1">En ligne</p>
+        </div>
+        <div class="p-4">
+            <p class="text-4xl font-bold text-blue-900">24/7</p>
+            <p class="text-gray-500 text-sm mt-1">Disponible</p>
+        </div>
+        <div class="p-4">
+            <p class="text-4xl font-bold text-orange-500">🇸🇳</p>
+            <p class="text-gray-500 text-sm mt-1">Sénégal</p>
+        </div>
+    </div>
+</section>
 
     {{-- ── DOCUMENTS DISPONIBLES --}}
-    <section class="py-20 px-6">
+    <section id="documents" class="py-20 px-6">
         <div class="max-w-5xl mx-auto">
             <div class="text-center mb-12">
                 <h3 class="text-3xl font-bold font-heading text-blue-900">
@@ -134,7 +229,7 @@
     </section>
 
     {{-- ── COMMENT ÇA MARCHE --}}
-    <section class="bg-blue-900 text-white py-20 px-6">
+    <section id="comment" class="bg-blue-900 text-white py-20 px-6">
         <div class="max-w-4xl mx-auto">
             <div class="text-center mb-12">
                 <h3 class="text-3xl font-bold font-heading">Comment ça marche ?</h3>
@@ -172,14 +267,85 @@
         </div>
     </section>
 
-    {{-- ── FOOTER  --}}
-    <footer class="bg-gray-900 text-gray-400 py-8 px-6 text-center text-sm">
-        <p class="font-bold text-white text-lg mb-1">
-            Docu<span class="text-orange-500">Sen</span>
-        </p>
-        <p>Plateforme de gestion des documents administratifs — République du Sénégal</p>
-        <p class="mt-2">© {{ date('Y') }} DocuSen. Tous droits réservés.</p>
-    </footer>
+    {{-- ── FOOTER --}}
+<footer class="bg-gray-900 text-white py-16 px-6">
+    <div class="max-w-6xl mx-auto">
+
+        {{-- Grille footer --}}
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-10 mb-12">
+
+            {{-- Logo + description --}}
+            <div>
+                <p class="text-2xl font-bold mb-3">
+                    Docu<span class="text-orange-500">Sen</span>
+                </p>
+                <p class="text-gray-400 text-sm leading-relaxed">
+                    Plateforme officielle de gestion des documents administratifs de la République du Sénégal.
+                </p>
+                <div class="flex gap-3 mt-4">
+                    <span class="bg-white/10 px-3 py-1 rounded-full text-xs text-gray-300">🇸🇳 Sénégal</span>
+                    <span class="bg-white/10 px-3 py-1 rounded-full text-xs text-gray-300">🔒 Sécurisé</span>
+                </div>
+            </div>
+
+            {{-- Liens rapides --}}
+            <div>
+                <p class="font-bold text-white mb-4">Liens rapides</p>
+                <div class="flex flex-col gap-2">
+                    <a href="{{ route('home') }}" class="text-gray-400 hover:text-orange-500 text-sm transition">
+                        🏠 Accueil
+                    </a>
+                    <a href="{{ route('home') }}#documents" class="text-gray-400 hover:text-orange-500 text-sm transition">
+                        📄 Documents disponibles
+                    </a>
+                    <a href="{{ route('home') }}#comment" class="text-gray-400 hover:text-orange-500 text-sm transition">
+                        ❓ Comment ça marche
+                    </a>
+                    <a href="{{ route('register') }}" class="text-gray-400 hover:text-orange-500 text-sm transition">
+                        ✍️ S'inscrire
+                    </a>
+                    <a href="{{ route('login') }}" class="text-gray-400 hover:text-orange-500 text-sm transition">
+                        🔑 Se connecter
+                    </a>
+                </div>
+            </div>
+
+            {{-- Documents populaires --}}
+            <div>
+                <p class="font-bold text-white mb-4">Documents populaires</p>
+                <div class="flex flex-col gap-2">
+                    <a href="{{ route('register') }}" class="text-gray-400 hover:text-orange-500 text-sm transition">
+                        👶 Acte de naissance
+                    </a>
+                    <a href="{{ route('register') }}" class="text-gray-400 hover:text-orange-500 text-sm transition">
+                        🪪 Renouvellement CNI
+                    </a>
+                    <a href="{{ route('register') }}" class="text-gray-400 hover:text-orange-500 text-sm transition">
+                        ✈️ Demande de passeport
+                    </a>
+                    <a href="{{ route('register') }}" class="text-gray-400 hover:text-orange-500 text-sm transition">
+                        ⚖️ Casier judiciaire
+                    </a>
+                    <a href="{{ route('register') }}" class="text-gray-400 hover:text-orange-500 text-sm transition">
+                        🏠 Certificat de résidence
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+        {{-- Ligne séparatrice --}}
+        <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+            <p class="text-gray-500 text-sm">
+                © {{ date('Y') }} DocuSen. Tous droits réservés.
+            </p>
+            <p class="text-gray-500 text-sm">
+                Développé par <span class="text-orange-500 font-semibold">Pape Mbaye Gaye</span>
+            </p>
+        </div>
+
+    </div>
+</footer>
 
 </body>
 </html>

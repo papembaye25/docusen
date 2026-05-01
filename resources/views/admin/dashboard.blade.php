@@ -10,7 +10,7 @@
 
     {{-- Navbar --}}
     <nav class="bg-blue-900 text-white px-6 py-4 flex justify-between items-center shadow-lg">
-        <h1 class="text-2xl font-bold">Docu<span class="text-orange-500">Sen</span> <span class="text-sm font-normal text-blue-300">Admin</span></h1>
+        <h1 class="text-2xl font-bold">Docu<span class="text-orange-500">Sen</span> <span class="text-sm font-normal text-gray-300">Admin</span></h1>
         <div class="flex items-center gap-4">
             <a href="{{ route('admin.requests.index') }}"
                 class="text-blue-200 hover:text-white text-sm transition">
